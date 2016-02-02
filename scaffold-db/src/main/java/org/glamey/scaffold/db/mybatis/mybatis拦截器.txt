@@ -1,0 +1,75 @@
+
+public Object execute(SqlSession sqlSession, Object[] args) {
+    Object result;
+    if (SqlCommandType.INSERT == command.getType()) {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.insert(command.getName(), param));
+    } else if (SqlCommandType.UPDATE == command.getType()) {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.update(command.getName(), param));
+    } else if (SqlCommandType.DELETE == command.getType()) {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.delete(command.getName(), param));
+    } else if (SqlCommandType.SELECT == command.getType()) {
+      if (method.returnsVoid() && method.hasResultHandler()) {
+        executeWithResultHandler(sqlSession, args);
+        result = null;
+      } else if (method.returnsMany()) {
+        result = executeForMany(sqlSession, args);
+      } else if (method.returnsMap()) {
+        result = executeForMap(sqlSession, args);
+      } else {
+        Object param = method.convertArgsToSqlCommandParam(args);
+        result = sqlSession.selectOne(command.getName(), param);
+      }
+    } else {
+      throw new BindingException("Unknown execution method for: " + command.getName());
+    }
+    if (result == null && method.getReturnType().isPrimitive() && !method.returnsVoid()) {
+      throw new BindingException("Mapper method '" + command.getName()
+          + " attempted to return null from a method with a primitive return type (" + method.getReturnType() + ").");
+    }
+    return result;
+}
+
+
+Mybatis针对返回的resultType=HashMap的形式，返回的结果一般为：List<HashMap<Integer,String>>
+样式一般为：[{"column_1":"1","column_2":"张三"},{"column_1":"2","column_2":"李四"},{"column_1":"3","column_2":"王五"}]
+大部分的时候，我们需要将数据转化为Map<Integer,String>的形式 {"1":"张三","2":"李四","3":"王五"}
+
+这样的话，就需要手动写一些拦截器来实现。
+
+方案一：
+    Map<Integer, String> queryForMap();
+
+    <select id="queryForMap" resultType="java.util.HashMap">
+        select id as id,name as name from user_system
+    </select>
+
+Dao方法上边没有MapKey的注解，并且返回的数据类型为Map,根据MapperMethod.java，会执行result = sqlSession.selectOne(command.getName(), param);
+因此我们可以动手，讲返回的List数据整合为一条即可。mybatis最终会根据List的大小来判断，如果List非空的话，默认取list.get(0)
+添加的拦截器为MapResultNoAnnotationInterceptor.java
+
+方案二：
+
+
+Dao上边添加MapKey，用来表名当前返回的Map对象，根据MapperMethod.java，会执行result = executeForMap(sqlSession, args);
+因此我们可以动手，将返回的map数据进行好列转行处理。
+添加的拦截器为MapResultNoAnnotationInterceptor.java
+
+
+<plugins>
+    <!--用来处理mybatis resultType为Map的数据类型-->
+    <plugin interceptor="cn.valuelink.vpms.utils.mybatis.MapResultInterceptor">
+        <property name="mapKey" value="key"/>
+        <property name="mapValue" value="value"/>
+    </plugin>
+    <!--<plugin interceptor="cn.valuelink.vpms.utils.mybatis.MapResultMapKeyInterceptor">
+        <property name="mapKey" value="key"/>
+        <property name="mapValue" value="value"/>
+    </plugin>-->
+</plugins>
+
+
+
+
