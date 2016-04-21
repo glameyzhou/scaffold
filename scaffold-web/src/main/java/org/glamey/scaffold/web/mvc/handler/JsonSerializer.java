@@ -2,6 +2,7 @@ package org.glamey.scaffold.web.mvc.handler;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import org.glamey.scaffold.json.Codes;
 import org.glamey.scaffold.json.JsonMapper;
 import org.glamey.scaffold.json.JsonV1;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
+
+import static org.glamey.scaffold.json.Codes.SYSTEM_ERROR;
 
 
 /**
@@ -64,7 +67,6 @@ final class JsonSerializer {
             jsonMapper.write(writer, value);
             writer.write(')');
         } else {
-
             response.setContentType(CONTENT_TYPE_JSON);
             jsonMapper.write(response.getWriter(), value);
         }
@@ -76,8 +78,9 @@ final class JsonSerializer {
         }
 
         if (value instanceof Throwable) {
-            final Throwable e = (Throwable) value;
-            return new JsonV1<>(Codes.SYSTEM_ERROR, e.getMessage(), null);
+            return new JsonV1<>(SYSTEM_ERROR,
+                    Throwables.getStackTraceAsString((Throwable) value),
+                    null);
         }
 
         return new JsonV1<>(Codes.OK, "OK", value);

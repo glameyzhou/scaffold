@@ -1,6 +1,5 @@
 package org.glamey.scaffold.web.mvc.handler;
 
-import com.google.common.base.Throwables;
 import org.glamey.scaffold.web.mvc.annotation.JsonBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +42,7 @@ public class JsonBodyExceptionResolver extends SimpleMappingExceptionResolver {
         if (method.isAnnotationPresent(JsonBody.class)) {
 //            String config = super.determineViewName(ex, request);
 //            Object value = Strings.isNullOrEmpty(config) ? ex : JsonSerializer.parseConfig(config, ex);
-            String stackTrace = Throwables.getStackTraceAsString(ex);
-            JsonSerializer.write(stackTrace, method, request, response);
+            JsonSerializer.write(ex, method, request, response);
             // skip other resolver and view render
             return ModelAndViewResolver.UNRESOLVED;
         }
