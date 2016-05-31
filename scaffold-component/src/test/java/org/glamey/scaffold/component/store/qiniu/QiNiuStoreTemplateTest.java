@@ -1,18 +1,18 @@
 package org.glamey.scaffold.component.store.qiniu;
 
 import com.google.common.io.Files;
+import org.glamey.scaffold.BaseSpringJunit;
 import org.glamey.scaffold.component.store.StoreTemplate;
 import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.io.File;
 
-import static org.junit.Assert.*;
-
 /**
  * @author zhouyang.zhou.
  */
-public class QiNiuStoreTemplateTest {
+public class QiNiuStoreTemplateTest extends BaseSpringJunit {
+
     @Resource
     private StoreTemplate qiNiuStoreTemplate;
 

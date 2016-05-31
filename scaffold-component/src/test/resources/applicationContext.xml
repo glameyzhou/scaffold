@@ -21,5 +21,5 @@
     <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.glamey.scaffold.web.mvc, com.mianshiok.interfaces"/>
+    <context:component-scan base-package="org.glamey.scaffold.component"/>
 </beans>

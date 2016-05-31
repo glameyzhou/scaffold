@@ -35,7 +35,6 @@ public class JsonMapper {
      * @return {@link JsonMapper}
      */
     public static JsonMapper create() {
-        LOGGER.debug("ObjectMapper init...");
         mapper = new ObjectMapper();
 //        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);       //属性为NULL 不序列化
 //        mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);    //属性为默认值不序列化
@@ -43,6 +42,7 @@ public class JsonMapper {
         mapper.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 //    mapper.setDateFormat(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        LOGGER.debug("ObjectMapper init success...");
         return new JsonMapper();
     }
 
