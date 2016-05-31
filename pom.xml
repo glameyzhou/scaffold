@@ -23,8 +23,19 @@
         <module>scaffold-db</module>
         <module>scaffold-json</module>
         <module>scaffold-web</module>
+        <module>scaffold-component</module>
     </modules>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>3.2.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
