@@ -63,7 +63,8 @@ public final class YunTongXunRestAPI {
     /**
      * 主账户信息
      *
-     * @return
+     * @return response
+     * @throws IOException exception
      */
     public final Map<String, Object> accountInfo() throws IOException {
         Request request = new Request.Builder()
@@ -78,7 +79,9 @@ public final class YunTongXunRestAPI {
     /**
      * 创建子账户
      *
-     * @return
+     * @param friendlyName friendlyName
+     * @return response
+     * @throws IOException IOException
      */
     public final Map<String, Object> subAccounts(String friendlyName) throws IOException {
         Assert.notNull(isNotBlank(friendlyName), "子账户不能为空");
@@ -99,7 +102,9 @@ public final class YunTongXunRestAPI {
     /**
      * 关闭子账户
      *
-     * @return
+     * @param subAccountSid subAccountSid
+     * @return response
+     * @throws IOException IOException
      */
     public final Map<String, Object> closeSubAccount(String subAccountSid) throws IOException {
         Assert.notNull(isNotBlank(subAccountSid), "子账户SID不能为空");
@@ -119,7 +124,9 @@ public final class YunTongXunRestAPI {
     /**
      * 子账户信息查询
      *
-     * @return
+     * @param friendlyName friendlyName
+     * @return response
+     * @throws IOException exception
      */
     public final Map<String, Object> querySubAccountByName(String friendlyName) throws IOException {
         Assert.notNull(isNotBlank(friendlyName), "子账户名字不能为空");
@@ -141,10 +148,11 @@ public final class YunTongXunRestAPI {
     /**
      * 下发模板短信
      *
-     * @param mobiles
-     * @param templateId
-     * @param data
-     * @return
+     * @param mobiles    the mobiles
+     * @param templateId templteId
+     * @param data       data
+     * @return response
+     * @throws IOException exception
      */
     public final Map<String, Object> smsTemplateSMS(String[] mobiles, String templateId, String[] data) throws IOException {
         Assert.state(mobiles != null && isNotBlank(templateId) && data != null, "参数错误");
@@ -164,16 +172,15 @@ public final class YunTongXunRestAPI {
         return doRequest(request, String.format("请求短信模板验证失败,mobiles=%s,templateId=%s,data=%s", mobiles, templateId, data));
     }
 
-
     /**
      * 下发语音验证码
      *
-     * @param mobile
-     * @param verifyCode
-     * @param displayNum
-     * @param playTimes
-     * @return
-     * @throws IOException
+     * @param mobile     mobile
+     * @param verifyCode verify code
+     * @param displayNum display number
+     * @param playTimes  play times
+     * @return response
+     * @throws IOException exception
      */
     public final Map<String, Object> callsVoiceVerify(String mobile, String verifyCode, String displayNum, String playTimes) throws IOException {
         Assert.state(isNotBlank(mobile) && isNotBlank(verifyCode), "参数错误");
@@ -214,8 +221,8 @@ public final class YunTongXunRestAPI {
      * @param needRecord      可选参数 是否录音
      * @param countDownTime   可选参数 设置倒计时时间
      * @param countDownPrompt 可选参数 到达倒计时时间播放的提示音
-     * @return
-     * @throws IOException
+     * @return response
+     * @throws IOException exception
      */
     public final Map<String, Object> callsCallback(String from, String to,
                                                    String customerSerNum, String fromSerNum, String promptTone,
@@ -253,10 +260,10 @@ public final class YunTongXunRestAPI {
     /**
      * 数据请求及其处理
      *
-     * @param request
-     * @param message
-     * @return
-     * @throws IOException
+     * @param request request
+     * @param message message
+     * @return response
+     * @throws IOException exception
      */
     private Map<String, Object> doRequest(Request request, String message) throws IOException {
         Response response = httpExecute(request);
@@ -276,8 +283,9 @@ public final class YunTongXunRestAPI {
     /**
      * 构建包含授权的请求头内容
      *
-     * @param bodySize
-     * @return
+     * @param bodySize    the size of body
+     * @param accountType account type
+     * @return http headers
      */
     private Headers buildHeader(long bodySize, AccountType accountType) {
         StringBuffer buffer = new StringBuffer();
@@ -304,8 +312,9 @@ public final class YunTongXunRestAPI {
     /**
      * 构建请求URL
      *
-     * @param function
-     * @return
+     * @param function    function
+     * @param accountType account type
+     * @return response
      */
     private String buildBaseUrl(String function, AccountType accountType) {
         StringBuffer buffer = new StringBuffer(baseUrl);
@@ -349,6 +358,10 @@ public final class YunTongXunRestAPI {
         private String APP_ID;
         private String TIME_STAMP;
 
+        /**
+         * @param baseUrl base url
+         * @return the builder object
+         */
 
         public Builder url(String baseUrl) {
             Assert.state(isNotBlank(baseUrl), "连接地址不能为空");

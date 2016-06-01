@@ -65,7 +65,7 @@ public class HuanXinInfo {
     /**
      * 用户授权
      *
-     * @return
+     * @return API对象
      */
     public HuanXinRestAPI auth() {
         return new HuanXinRestAPI.Builder().url(getBaseUrl(), getOrgName(), getAppName()).auth(getClientId(), getClientSecret()).build();

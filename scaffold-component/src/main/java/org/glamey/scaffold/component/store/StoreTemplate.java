@@ -9,18 +9,20 @@ import java.io.IOException;
 public interface StoreTemplate {
 
     /**
-     * @param uploadFile
-     * @param fileName
-     * @return
-     * @throws Exception
+     * upload the file to cloud
+     *
+     * @param uploadFile the upload file
+     * @param fileName   file name
+     * @return cloud file url
+     * @throws IOException exception
      */
     String upload(File uploadFile, String fileName) throws IOException;
 
     /**
-     * @param bytes
-     * @param fileName
-     * @return
-     * @throws Exception
+     * @param bytes    the file bytes
+     * @param fileName file name
+     * @return the cloud file url
+     * @throws IOException exception
      */
     String upload(byte[] bytes, String fileName) throws IOException;
 }

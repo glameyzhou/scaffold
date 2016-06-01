@@ -53,12 +53,17 @@ public class YunTongXunInfo {
     /**
      * 初始化API
      *
-     * @return
+     * @return the restAPI
      */
     public YunTongXunRestAPI initAPIAccount() {
         return new YunTongXunRestAPI.Builder().url(getBaseUrl()).account(getAccountSid(), getAuthToken()).app(getAppId()).build();
     }
 
+    /**
+     * @param subAccountSid   subAccountSid
+     * @param subAccountToken subAccountToken
+     * @return yuntongxun restAPI
+     */
     public YunTongXunRestAPI initAPISubAccount(String subAccountSid, String subAccountToken) {
         return new YunTongXunRestAPI.Builder().url(getBaseUrl()).account(getAccountSid(), getAuthToken()).subAccount(subAccountSid, subAccountToken).app(getAppId()).build();
     }

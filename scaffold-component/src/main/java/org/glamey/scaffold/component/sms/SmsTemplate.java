@@ -15,6 +15,7 @@ public interface SmsTemplate {
      * @param mobiles    手机号码,支持多个号码
      * @param templateId 模板ID
      * @param data       模板统配内容集合
+     * @throws IOException exception
      */
     void sendSmsContentOfText(String[] mobiles, String templateId, String[] data) throws IOException;
 
@@ -22,18 +23,18 @@ public interface SmsTemplate {
     /**
      * 下发语音验证码
      *
-     * @param mobile
-     * @param verifyCode
-     * @param displayNum
-     * @param playTimes
-     * @throws IOException
+     * @param mobile     mobile
+     * @param verifyCode verify code
+     * @param displayNum display number
+     * @param playTimes  play times
+     * @throws IOException exception
      */
     void sendSmsContentOfVoice(String mobile, String verifyCode, String displayNum, String playTimes) throws IOException;
 
     /**
      * 短信厂商
      *
-     * @return
+     * @return the sms manufacturer
      */
     SmsManufacturer manufacturer();
 }

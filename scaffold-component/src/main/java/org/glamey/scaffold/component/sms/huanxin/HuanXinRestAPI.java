@@ -47,7 +47,8 @@ public final class HuanXinRestAPI {
      * 获取token
      * 接口限流说明: 同一个IP每秒最多可调用30次, 超过的部分会返回429或503错误, 所以在调用程序中, 如果碰到了这样的错误, 需要稍微暂停一下并且重试。如果该限流控制不满足需求，请联系商务经理开放更高的权限。
      *
-     * @return
+     * @return 响应值
+     * @throws IOException exception
      */
     public final Map<String, Object> token() throws IOException {
         Request request = new Request.Builder()
@@ -61,7 +62,9 @@ public final class HuanXinRestAPI {
     /**
      * 获取账户信息
      *
-     * @return
+     * @param accountId accountId
+     * @return the response result
+     * @throws IOException IOException
      */
     public final Map<String, Object> accountInfo(String accountId) throws IOException {
         Assert.notNull(isNotBlank(accountId), "账户ID不能为空");
@@ -76,7 +79,11 @@ public final class HuanXinRestAPI {
     /**
      * 创建账户
      *
-     * @return
+     * @param accountId accountId
+     * @param password  password
+     * @param nickName  nickName
+     * @return the response result
+     * @throws IOException IOException
      */
     public final Map<String, Object> createAccount(String accountId, String password, String nickName) throws IOException {
         Assert.notNull(isNotBlank(accountId) && isNotBlank(password), "账户信息不能为空");
@@ -97,10 +104,10 @@ public final class HuanXinRestAPI {
     /**
      * 修改用户昵称
      *
-     * @param accountId
-     * @param nickName
-     * @return
-     * @throws IOException
+     * @param accountId accountId
+     * @param nickName  nickName
+     * @return the response result
+     * @throws IOException IOException
      */
     public final Map<String, Object> updateNickName(String accountId, String nickName) throws IOException {
         Assert.notNull(isNotBlank(accountId) && isNotBlank(nickName), "用户账户ID和昵称不能为空");
@@ -119,10 +126,10 @@ public final class HuanXinRestAPI {
     /**
      * 数据请求及其处理
      *
-     * @param request
-     * @param message
-     * @return
-     * @throws IOException
+     * @param request request
+     * @param message message
+     * @return the response result
+     * @throws IOException IOException
      */
     private Map<String, Object> doRequest(Request request, String message) throws IOException {
         Response response = httpExecute(request);
@@ -136,10 +143,19 @@ public final class HuanXinRestAPI {
         throw new ComponentException(response.code(), (String) resultMap.get("error_description"));
     }
 
+    /**
+     * @param request request
+     * @return response
+     * @throws IOException IOException
+     */
     private Response httpExecute(Request request) throws IOException {
         return HTTP_CLIENT.newCall(request).execute();
     }
 
+    /**
+     * @return http headers
+     * @throws IOException IOException
+     */
     private Headers buildTokenHeader() throws IOException {
         //TODO 暂时使用每次获取token，后续修改为定时器，定时刷新token
         String token = HuanXinConstants.TOKEN;

@@ -48,6 +48,8 @@ public class QiNiuRestAPI {
      *
      * @param uploadFile 待上传的文件路径
      * @param fileName   文件名称
+     * @return the cloud file url
+     * @throws QiniuException exception
      */
     public String upload(String uploadFile, String fileName) throws QiniuException {
         Assert.notNull(uploadFile);
@@ -59,8 +61,10 @@ public class QiNiuRestAPI {
     }
 
     /**
-     * @param bytes
-     * @param fileName
+     * @param bytes    bytes
+     * @param fileName file name
+     * @return the cloud file url
+     * @throws QiniuException exception
      */
     public String upload(byte[] bytes, String fileName) throws QiniuException {
         Assert.notNull(bytes);

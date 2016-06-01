@@ -43,7 +43,7 @@ public class QiNiuInfo {
     /**
      * 用户授权
      *
-     * @return
+     * @return qiniu rest api
      * @see #authBucket()
      */
     public QiNiuRestAPI auth() {
@@ -53,7 +53,7 @@ public class QiNiuInfo {
     /**
      * 用户授权，并且执行存储的空间
      *
-     * @return
+     * @return qiniu rest api
      * @see #auth()
      */
     public QiNiuRestAPI authBucket() {
